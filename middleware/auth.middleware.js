@@ -6,8 +6,7 @@ dotenv.config()
 const protectedRoute = async (req, res, next) => {
     const authHeader = req.headers.authorization || ""
     const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null
-    // console.log("URL:", req.originalUrl);
-    // console.log("AUTH HEADER:", req.headers.authorization);
+
     try {
         if (!token) {
             return res.status(401).json({ message: "No Token Provided" })
@@ -18,7 +17,7 @@ const protectedRoute = async (req, res, next) => {
             return res.status(400).json({ message: "Invalid Token" })
         }
         req.user = { id: payload.userId, username: payload.username, role: payload.role }
-        // console.log("req.user", req.user)
+
         next()
     } catch (error) {
         if (error.name === "TokenExpiredError") {
