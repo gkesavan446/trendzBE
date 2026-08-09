@@ -146,7 +146,7 @@ const addtoCart = async (req, res) => {
         // const user = await Auth.findOne({ _id: id });
         // user.cart = cart
         // await user.save();
-        const user = await Auth.findByIdAndUpdate(id, { $set: { cart } }, { new: true });
+        const user = await Auth.findByIdAndUpdate(id, { $set: { cart } }, { returnDocument: "after" });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
