@@ -5,13 +5,13 @@ const saveOrder = async (req, res) => {
   try {
     // console.log("userId", req.user);
     const { id } = req.user
-    const { products, totalPrice, paymentStatus, paymentId } = req.body;
+    const { products, totalPrice, paymentStatus, paymentId, checkoutSessionId } = req.body;
     // console.log("userId", id);
     if (!products || products.length === 0 || !totalPrice) {
       return res.status(400).json({ message: "Required fields are missing" });
     }
 
-    const existingOrder = await Order.findOne({ paymentId });
+    const existingOrder = await Order.findOne({ checkoutSessionId });
 
     if (existingOrder) {
       return res.status(200).json({ message: "Order already exists", order: existingOrder });
@@ -22,7 +22,8 @@ const saveOrder = async (req, res) => {
       products,
       totalPrice,
       paymentStatus,
-      paymentId
+      paymentId,
+      checkoutSessionId
     });
     await newOrder.save();
 

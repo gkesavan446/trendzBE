@@ -34,7 +34,7 @@ const handleCheckout = async (req, res) => {
 
             success_url: "http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}",
 
-            cancel_url: "http://localhost:5173/cancel",
+            cancel_url: "http://localhost:5173/cancel?session_id={CHECKOUT_SESSION_ID}",
         });
 
         res.status(200).json({

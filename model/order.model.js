@@ -30,6 +30,9 @@ const orderSchema = new Schema(
         paymentId: {
             type: String,
         },
+        checkoutSessionId: {
+            type: String,
+        }
 
     },
     {
