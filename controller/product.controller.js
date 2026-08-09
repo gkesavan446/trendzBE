@@ -50,9 +50,9 @@ const getALLProducts = async (req, res) => {
     try {
         const result = await Product.find();
         if (result.length == 0 || !result) {
-            return res.status(400).json({ message: "No Produts Found" })
+            return res.status(404).json({ message: "No Produts Found" })
         }
-        res.status(200).json(result);
+        res.status(200).json({ message: "Successfully fetched", products: result });
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error", Error: error.message });
     }
@@ -81,7 +81,7 @@ const updateProductById = async (req, res) => {
             return res.status(404).json({ message: "Invalid or No product found" });
         }
         if (req.file) {
-            await cloudinary.uploader.destroy(product.image.public_id);
+            await cloudinary.uploader.destroy(product.image?.public_id);
 
             const uploadedImage = await cloudinary.uploader.upload(req.file.path, { folder: "products" });
 

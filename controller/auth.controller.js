@@ -41,7 +41,7 @@ const signup = async (req, res) => {
     }
 }
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
     const { email, password } = req.body
     try {
         if (!email || !password) {
@@ -143,9 +143,14 @@ const addtoCart = async (req, res) => {
         return res.status(400).json({ message: "Invalid User ID or Cart Items" })
     }
     try {
-        const user = await Auth.findOne({ _id: id });
-        user.cart = cart
-        await user.save();
+        // const user = await Auth.findOne({ _id: id });
+        // user.cart = cart
+        // await user.save();
+        const user = await Auth.findByIdAndUpdate(id, { $set: { cart } }, { new: true });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         res.status(201).json({ message: "Cart Saved", cart: user.cart });
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error", Error: error.message })
@@ -153,4 +158,4 @@ const addtoCart = async (req, res) => {
 }
 
 
-export { signup, signin, forgetPassword, resetPassword, addtoCart };
+export { signup, login, forgetPassword, resetPassword, addtoCart };

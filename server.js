@@ -14,7 +14,7 @@ dotenv.config()
 
 const app = express();
 
-const PORT = process.env.PORT || 4444
+const PORT = process.env.PORT || 3333
 
 //Connection to Database
 connectDB();
@@ -38,12 +38,12 @@ app.use('/api/v1/order', orderRouter);
 
 
 app.use((req, res) => {
-    res.sendFile("./notfound.html", { root: __dirname })
+    res.status(404).sendFile("./notfound.html", { root: __dirname })
 })
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "Internal Server Error", Error: err.message });
 });
 
 mongoose.connection.once('open', () => {

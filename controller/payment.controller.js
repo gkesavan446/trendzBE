@@ -32,7 +32,7 @@ const handleCheckout = async (req, res) => {
 
             mode: "payment",
 
-            success_url: "http://localhost:5173/success",
+            success_url: "http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}",
 
             cancel_url: "http://localhost:5173/cancel",
         });
@@ -51,4 +51,41 @@ const handleCheckout = async (req, res) => {
     }
 };
 
-export { handleCheckout };
+const verifyPayment = async (req, res) => {
+    try {
+        const { sessionId } = req.body;
+
+        if (!sessionId) {
+            return res.status(400).json({
+                message: "Session ID is required",
+            });
+        }
+
+        const session = await stripe.checkout.sessions.retrieve(
+            sessionId
+        );
+
+        if (session.payment_status !== "paid") {
+            return res.status(400).json({
+                message: "Payment was not successful",
+            });
+        }
+
+        res.status(200).json({
+            message: "Payment verified",
+            paymentId: session.payment_intent,
+            sessionId: session.id,
+            paymentStatus: session.payment_status,
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Payment verification failed",
+            error: error.message,
+        });
+    }
+};
+
+export { handleCheckout, verifyPayment };

@@ -10,6 +10,6 @@ const router = Router();
 
 // router.route('/').get(getALLProducts).post(protecedRoute, isAdmin, createProduct);
 router.route('/').get(getALLProducts).post(protectedRoute, isAdmin, upload.single("image"), createProduct);
-router.route('/:id').get(getProductById).patch(protectedRoute, isAdmin, upload.single("image"), updateProductById).delete(protectedRoute, isAdmin, deleteProductById);
+router.route('/:id').get(getProductById).put(protectedRoute, isAdmin, upload.single("image"), updateProductById).delete(protectedRoute, isAdmin, deleteProductById);
 
 export default router;

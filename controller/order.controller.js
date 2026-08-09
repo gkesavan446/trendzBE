@@ -1,4 +1,5 @@
 import Order from '../model/order.model.js'
+import Auth from '../model/auth.model.js'
 
 const saveOrder = async (req, res) => {
   try {
@@ -10,6 +11,12 @@ const saveOrder = async (req, res) => {
       return res.status(400).json({ message: "Required fields are missing" });
     }
 
+    const existingOrder = await Order.findOne({ paymentId });
+
+    if (existingOrder) {
+      return res.status(200).json({ message: "Order already exists", order: existingOrder });
+    }
+
     const newOrder = new Order({
       userId: id,
       products,
@@ -19,7 +26,9 @@ const saveOrder = async (req, res) => {
     });
     await newOrder.save();
 
-    res.status(201).json({ message: "Order saved", order: newOrder });
+    await Auth.findByIdAndUpdate(id, { $set: { cart: [] } });
+
+    res.status(201).json({ message: "Order saved and cart cleared", order: newOrder });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error", errorMSg: "Failed to save order", error: error.message });

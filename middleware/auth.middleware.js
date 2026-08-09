@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 
-const protectedRoute = async (req, res, next) => {
+const protectedRoute = (req, res, next) => {
     const authHeader = req.headers.authorization || ""
     const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null
 
