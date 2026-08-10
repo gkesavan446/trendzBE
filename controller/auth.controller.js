@@ -95,7 +95,7 @@ transport.verify((error, success) => {
     }
 });
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 const forgotPassword = async (req, res) => {
     // console.log("check")
