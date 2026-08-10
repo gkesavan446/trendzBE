@@ -3,6 +3,7 @@ import Auth from '../model/auth.model.js'
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
+import { Resend } from "resend";
 
 const hashPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
@@ -94,6 +95,8 @@ transport.verify((error, success) => {
     }
 });
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 const forgotPassword = async (req, res) => {
     // console.log("check")
     const { email } = req.body
@@ -120,6 +123,18 @@ const forgotPassword = async (req, res) => {
             }
         )
 
+        // const { data, error } = await resend.emails.send({
+        //     from: "Trendz <onboarding@resend.dev>",
+        //     to: [email],
+        //     subject: "Password Reset OTP",
+        //     html: `<p>Your OTP is <b>${OTP}</b>. It expires in 2 minutes.</p>`
+        // });
+
+        // if (error) {
+        //     console.log("Resend error:", error);
+        //     throw new Error(error.message);
+        // }
+        // console.log("Email sent:", data);
         res.status(200).json({ message: "OTP sent to your email." })
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error", Error: error.message });
