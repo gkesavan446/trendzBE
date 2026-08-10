@@ -12,7 +12,7 @@ const hashPassword = async (password) => {
 
 const signup = async (req, res) => {
     const { username, email, password, role } = req.body
-    // console.log("role", role);
+
     try {
         if (!username || !email || !password) {
             return res.status(400).json({ message: "All Fields are required" });
