@@ -86,6 +86,14 @@ const transport = nodemailer.createTransport({
     }
 });
 
+transport.verify((error, success) => {
+    if (error) {
+        console.log("Email connection failed:", error);
+    } else {
+        console.log("Email server is ready");
+    }
+});
+
 const forgotPassword = async (req, res) => {
     // console.log("check")
     const { email } = req.body
