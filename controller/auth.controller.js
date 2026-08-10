@@ -68,15 +68,26 @@ const generateOTP = () => {
     return crypto.randomInt(100000, 1000000).toString()
 }
 
-const transport = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: `${process.env.EMAIL_USER}`,
-        pass: `${process.env.EMAIL_PASS}`
-    }
-})
+// const transport = nodemailer.createTransport({
+//     service: "gmail",
+//     auth: {
+//         user: `${process.env.EMAIL_USER}`,
+//         pass: `${process.env.EMAIL_PASS}`
+//     }
+// })
 
-const forgetPassword = async (req, res) => {
+const transport = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+const forgotPassword = async (req, res) => {
+    // console.log("check")
     const { email } = req.body
     try {
         if (!email) {
@@ -158,4 +169,4 @@ const addtoCart = async (req, res) => {
 }
 
 
-export { signup, login, forgetPassword, resetPassword, addtoCart };
+export { signup, login, forgotPassword, resetPassword, addtoCart };
