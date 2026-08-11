@@ -125,7 +125,7 @@ const forgotPassword = async (req, res) => {
 
         res.status(200).json({ message: "OTP sent to your email." })
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error", Error: error.message });
+        res.status(500).json({ message: "The email service may be unavailable on the deployed server", Error: error.message });
     }
 }
 
